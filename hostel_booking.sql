@@ -1,4 +1,6 @@
--- Students table
+CREATE DATABASE hostel_booking;
+USE hostel_booking;
+
 CREATE TABLE students (
     id INT AUTO_INCREMENT PRIMARY KEY,
     full_name VARCHAR(100) NOT NULL,
@@ -12,7 +14,18 @@ CREATE TABLE students (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Hostels table
+CREATE TABLE admins (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    full_name VARCHAR(100),
+    email VARCHAR(100)
+);
+
+INSERT INTO admins (username, password, full_name, email) 
+VALUES ('admin', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Administrator', 'admin@hostel.com');
+-- password is "password"
+
 CREATE TABLE hostels (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -22,7 +35,6 @@ CREATE TABLE hostels (
     description TEXT
 );
 
--- Rooms table
 CREATE TABLE rooms (
     id INT AUTO_INCREMENT PRIMARY KEY,
     hostel_id INT NOT NULL,
@@ -38,7 +50,6 @@ CREATE TABLE rooms (
     UNIQUE KEY unique_room_per_hostel (hostel_id, room_number)
 );
 
--- Bookings table
 CREATE TABLE bookings (
     id INT AUTO_INCREMENT PRIMARY KEY,
     student_id INT NOT NULL,
@@ -53,7 +64,6 @@ CREATE TABLE bookings (
     FOREIGN KEY (room_id) REFERENCES rooms(id) ON DELETE CASCADE
 );
 
--- Complaints table
 CREATE TABLE complaints (
     id INT AUTO_INCREMENT PRIMARY KEY,
     student_id INT NOT NULL,
@@ -67,11 +77,16 @@ CREATE TABLE complaints (
     FOREIGN KEY (booking_id) REFERENCES bookings(id) ON DELETE SET NULL
 );
 
--- Admin users table
-CREATE TABLE admins (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(50) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    full_name VARCHAR(100),
-    email VARCHAR(100)
-);
+-- Insert some sample hostels and rooms
+INSERT INTO hostels (name, type, address, total_rooms, description) VALUES
+('Alpha House', 'Boys', 'Block A, Campus', 10, 'Modern boys hostel with all facilities'),
+('Beta House', 'Girls', 'Block B, Campus', 12, 'Secure and comfortable girls hostel'),
+('Gamma House', 'Mixed', 'Block C, Campus', 8, 'Co-ed hostel for senior students');
+
+INSERT INTO rooms (hostel_id, room_number, floor, room_type, has_ac, capacity, current_occupancy, price_per_month, status) VALUES
+(1, '101', 1, 'Double', TRUE, 2, 0, 5000, 'Available'),
+(1, '102', 1, 'Single', FALSE, 1, 0, 3500, 'Available'),
+(1, '201', 2, 'Triple', TRUE, 3, 1, 4500, 'Partially Available'),
+(2, '101', 1, 'Double', FALSE, 2, 2, 4000, 'Full'),
+(2, '102', 1, 'Single', TRUE, 1, 1, 6000, 'Full'),
+(3, '101', 1, 'Dormitory', FALSE, 6, 2, 2000, 'Partially Available');
