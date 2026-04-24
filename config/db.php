@@ -1,8 +1,8 @@
 <?php
 session_start();
 $host = 'localhost';
-$user = 'root';
-$pass = '';
+$user = 'boris';
+$pass = '12345678';
 $db   = 'hostel_booking';
 
 $conn = mysqli_connect($host, $user, $pass, $db);
